@@ -1,0 +1,170 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #0b0e12;
+  color: white;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+button,
+select {
+  font: inherit;
+}
+
+.app {
+  min-height: 100vh;
+  background: #0b0e12;
+}
+
+.header {
+  height: 74px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: #10141a;
+  border-bottom: 1px solid #252b33;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 21px;
+  letter-spacing: 2px;
+}
+
+.header span {
+  display: block;
+  margin-top: 4px;
+  color: #727c89;
+  font-size: 12px;
+}
+
+.clear-button {
+  border: 1px solid #b33a3a;
+  background: #30191b;
+  color: #ff7373;
+  padding: 9px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.clear-button:hover {
+  background: #4a2023;
+}
+
+.main {
+  display: flex;
+  min-height: calc(100vh - 74px);
+}
+
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  padding: 22px 16px;
+  background: #10141a;
+  border-right: 1px solid #252b33;
+}
+
+.sidebar section {
+  margin-bottom: 30px;
+}
+
+.sidebar h2 {
+  color: #7f8995;
+  font-size: 11px;
+  letter-spacing: 2px;
+  margin: 0 0 10px;
+}
+
+.sidebar select {
+  width: 100%;
+  padding: 10px;
+  color: #fff;
+  background: #1a2028;
+  border: 1px solid #303743;
+  border-radius: 5px;
+}
+
+.floor-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.floor-buttons button,
+.tool-buttons button {
+  background: #1a2028;
+  color: #abb3bd;
+  border: 1px solid #303743;
+  border-radius: 5px;
+  padding: 9px;
+  cursor: pointer;
+}
+
+.floor-buttons button:hover,
+.tool-buttons button:hover {
+  background: #252c35;
+}
+
+.floor-buttons button.active,
+.tool-buttons button.active {
+  background: #d9a514;
+  border-color: #e8ba39;
+  color: #0d0f12;
+  font-weight: bold;
+}
+
+.tool-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.current-status {
+  margin-top: 40px;
+  padding: 12px;
+  background: #161b21;
+  border: 1px solid #272e37;
+  border-radius: 6px;
+}
+
+.current-status span {
+  display: block;
+  color: #6f7985;
+  font-size: 11px;
+}
+
+.current-status strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 18px;
+}
+
+.board-area {
+  flex: 1;
+  padding: 18px;
+  overflow: auto;
+}
+
+.board-title {
+  margin-bottom: 10px;
+  color: #9da6b1;
+  font-size: 13px;
+}
+
+.canvas-wrapper {
+  width: 1102px;
+  height: 722px;
+  border: 1px solid #303743;
+  background: #151a20;
+  box-shadow: 0 10px 35px rgb(0 0 0 / 35%);
+}
