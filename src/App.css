@@ -4,8 +4,10 @@
 
 body {
   margin: 0;
+
   background: #0b0e12;
   color: white;
+
   font-family:
     Inter,
     system-ui,
@@ -20,40 +22,65 @@ select {
   font: inherit;
 }
 
+/* ========================================
+   APP
+======================================== */
+
 .app {
   min-height: 100vh;
+
   background: #0b0e12;
 }
 
+/* ========================================
+   HEADER
+======================================== */
+
 .header {
   height: 74px;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   padding: 0 24px;
+
   background: #10141a;
+
   border-bottom: 1px solid #252b33;
 }
 
 .header h1 {
   margin: 0;
+
   font-size: 21px;
+
   letter-spacing: 2px;
 }
 
 .header span {
   display: block;
+
   margin-top: 4px;
+
   color: #727c89;
+
   font-size: 12px;
 }
 
+/* ========================================
+   CLEAR BUTTON
+======================================== */
+
 .clear-button {
-  border: 1px solid #b33a3a;
+  padding: 9px 16px;
+
   background: #30191b;
   color: #ff7373;
-  padding: 9px 16px;
+
+  border: 1px solid #b33a3a;
   border-radius: 5px;
+
   cursor: pointer;
 }
 
@@ -61,110 +88,746 @@ select {
   background: #4a2023;
 }
 
+/* ========================================
+   MAIN
+======================================== */
+
 .main {
   display: flex;
+
   min-height: calc(100vh - 74px);
 }
 
+/* ========================================
+   SIDEBAR
+======================================== */
+
 .sidebar {
   width: 220px;
+
   flex-shrink: 0;
+
   padding: 22px 16px;
+
   background: #10141a;
+
   border-right: 1px solid #252b33;
 }
 
-.sidebar section {
+.sidebar-section {
   margin-bottom: 30px;
 }
 
-.sidebar h2 {
-  color: #7f8995;
-  font-size: 11px;
-  letter-spacing: 2px;
+.sidebar-section:last-child {
+  margin-bottom: 0;
+}
+
+.sidebar-section-title {
   margin: 0 0 10px;
+
+  color: #7f8995;
+
+  font-size: 11px;
+
+  letter-spacing: 2px;
 }
 
-.sidebar select {
+/* ========================================
+   MAP SELECT
+======================================== */
+
+.sidebar-select {
   width: 100%;
+
   padding: 10px;
-  color: #fff;
+
+  color: #ffffff;
+
   background: #1a2028;
+
   border: 1px solid #303743;
   border-radius: 5px;
-}
 
-.floor-buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
-}
-
-.floor-buttons button,
-.tool-buttons button {
-  background: #1a2028;
-  color: #abb3bd;
-  border: 1px solid #303743;
-  border-radius: 5px;
-  padding: 9px;
   cursor: pointer;
 }
 
-.floor-buttons button:hover,
-.tool-buttons button:hover {
+.sidebar-select:focus {
+  outline: none;
+
+  border-color: #d9a514;
+}
+
+/* ========================================
+   FLOOR
+======================================== */
+
+.floor-buttons {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 6px;
+}
+
+.floor-button {
+  padding: 9px;
+
+  background: #1a2028;
+  color: #abb3bd;
+
+  border: 1px solid #303743;
+  border-radius: 5px;
+
+  cursor: pointer;
+}
+
+.floor-button:hover {
   background: #252c35;
 }
 
-.floor-buttons button.active,
-.tool-buttons button.active {
+.floor-button.active {
   background: #d9a514;
+
   border-color: #e8ba39;
+
   color: #0d0f12;
+
   font-weight: bold;
 }
 
-.tool-buttons {
+/* ========================================
+   TOOLS
+======================================== */
+
+.tool-grid {
   display: flex;
+
   flex-direction: column;
+
   gap: 7px;
 }
 
-.current-status {
+.tool-button {
+  width: 100%;
+
+  padding: 9px;
+
+  background: #1a2028;
+
+  color: #abb3bd;
+
+  border: 1px solid #303743;
+  border-radius: 5px;
+
+  cursor: pointer;
+}
+
+.tool-button:hover {
+  background: #252c35;
+}
+
+.tool-button.active {
+  background: #d9a514;
+
+  border-color: #e8ba39;
+
+  color: #0d0f12;
+
+  font-weight: bold;
+}
+
+/* ========================================
+   MARKERS
+======================================== */
+
+.marker-buttons {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 7px;
+}
+
+.marker-button {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 7px;
+
+  background: #1a2028;
+  color: #abb3bd;
+
+  border: 1px solid #303743;
+  border-radius: 5px;
+
+  cursor: pointer;
+}
+
+.marker-button:hover {
+  background: #252c35;
+}
+
+.marker-button.active {
+  border-color: #d9a514;
+}
+
+.marker-preview {
+  width: 30px;
+  height: 30px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 14px;
+
+  font-weight: bold;
+}
+
+.marker-preview.alphabet {
+  background: #f59e0b;
+
+  color: #111111;
+
+  border-radius: 50%;
+}
+
+.marker-preview.number {
+  color: #ffffff;
+
+  border-radius: 4px;
+}
+
+/* ========================================
+   COMMON GADGET GRID
+======================================== */
+
+.gadget-grid {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 5px;
+}
+
+/* ========================================
+   COMMON GADGET BUTTON
+   OPERATORと同じ46×46
+======================================== */
+
+.gadget-button {
+  width: 46px;
+  height: 46px;
+
+  flex: 0 0 46px;
+
+  padding: 2px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #292d33;
+
+  border: 1px solid #4a4f57;
+  border-radius: 4px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease,
+    transform 0.12s ease;
+}
+
+.gadget-button img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  pointer-events: none;
+}
+
+.gadget-button:hover {
+  background: #3a4049;
+
+  border-color: #8d949e;
+
+  transform: translateY(-1px);
+}
+
+.gadget-button.active {
+  background: #d9a514;
+
+  border: 2px solid #ffffff;
+}
+
+/* ========================================
+   STATUS
+======================================== */
+
+.status-box {
   margin-top: 40px;
+
   padding: 12px;
+
   background: #161b21;
+
   border: 1px solid #272e37;
   border-radius: 6px;
 }
 
-.current-status span {
+.status-row {
+  margin-bottom: 10px;
+}
+
+.status-row:last-child {
+  margin-bottom: 0;
+}
+
+.status-row span {
   display: block;
+
   color: #6f7985;
+
   font-size: 11px;
 }
 
-.current-status strong {
+.status-row strong {
   display: block;
+
   margin-top: 4px;
-  font-size: 18px;
+
+  color: #ffffff;
+
+  font-size: 14px;
 }
+
+/* ========================================
+   BOARD AREA
+======================================== */
 
 .board-area {
   flex: 1;
+
   padding: 18px;
+
   overflow: auto;
 }
 
 .board-title {
   margin-bottom: 10px;
+
   color: #9da6b1;
+
   font-size: 13px;
 }
 
+/* ========================================
+   CANVAS
+======================================== */
+
 .canvas-wrapper {
-  width: 1102px;
-  height: 722px;
-  border: 1px solid #303743;
+  width: 1352px;
+  height: 902px;
+
   background: #151a20;
-  box-shadow: 0 10px 35px rgb(0 0 0 / 35%);
+
+  border: 1px solid #303743;
+
+  box-shadow:
+    0 10px 35px rgb(0 0 0 / 35%);
+
+  overflow: hidden;
+}
+
+/* ========================================
+   OPERATOR PANEL
+======================================== */
+
+.operator-panel {
+  width: 1102px;
+
+  margin-top: 12px;
+
+  padding: 10px;
+
+  background: #10141a;
+
+  border: 1px solid #303743;
+  border-radius: 5px;
+}
+
+/* ========================================
+   OPERATOR PANEL HEADER
+======================================== */
+
+.operator-panel-header {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 8px;
+}
+
+.operator-panel-title {
+  color: #7f8995;
+
+  font-size: 11px;
+
+  letter-spacing: 2px;
+}
+
+/* ========================================
+   ATTACK / DEFENSE TABS
+======================================== */
+
+.operator-side-tabs {
+  display: flex;
+
+  gap: 5px;
+}
+
+.operator-side-tab {
+  padding: 5px 12px;
+
+  background: #1a2028;
+
+  color: #abb3bd;
+
+  border: 1px solid #303743;
+  border-radius: 5px;
+
+  font-size: 11px;
+
+  cursor: pointer;
+}
+
+.operator-side-tab:hover {
+  background: #252c35;
+}
+
+.operator-side-tab.active {
+  background: #d9a514;
+
+  border-color: #e8ba39;
+
+  color: #0d0f12;
+
+  font-weight: bold;
+}
+
+/* ========================================
+   OPERATOR PANEL CONTENT
+======================================== */
+
+.operator-panel-content {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 12px;
+}
+
+/* ========================================
+   OPERATOR LIST
+======================================== */
+
+.operator-list {
+  flex: 1;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 5px;
+}
+
+/* ========================================
+   OPERATOR BUTTON
+======================================== */
+
+.operator-button {
+  width: 46px;
+  height: 46px;
+
+  flex: 0 0 46px;
+
+  padding: 2px;
+
+  background: #292d33;
+
+  border: 1px solid #4a4f57;
+  border-radius: 4px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease,
+    transform 0.12s ease;
+}
+
+.operator-button img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  pointer-events: none;
+}
+
+.operator-button:hover {
+  background: #3a4049;
+
+  border-color: #8d949e;
+
+  transform: translateY(-1px);
+}
+
+.operator-button.active {
+  background: #d9a514;
+
+  border: 2px solid #ffffff;
+}
+
+/* ========================================
+   UNIQUE GADGET AREA
+======================================== */
+
+.operator-gadget-area {
+  flex: 0 0 auto;
+
+  min-width: 70px;
+
+  padding-left: 12px;
+
+  border-left: 1px solid #303743;
+}
+
+.operator-gadget-title {
+  margin-bottom: 6px;
+
+  color: #7f8995;
+
+  font-size: 10px;
+
+  letter-spacing: 1px;
+}
+
+/* ========================================
+   UNIQUE GADGET LIST
+======================================== */
+
+.operator-gadget-list {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 5px;
+}
+
+/* ========================================
+   UNIQUE GADGET BUTTON
+   OPERATORと同じ46×46
+======================================== */
+
+.operator-gadget-button {
+  width: 46px;
+  height: 46px;
+
+  flex: 0 0 46px;
+
+  padding: 2px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #292d33;
+
+  border: 1px solid #4a4f57;
+  border-radius: 4px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease,
+    transform 0.12s ease;
+}
+
+.operator-gadget-button img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  pointer-events: none;
+}
+
+.operator-gadget-button:hover {
+  background: #3a4049;
+
+  border-color: #8d949e;
+
+  transform: translateY(-1px);
+}
+
+.operator-gadget-button.active {
+  background: #d9a514;
+
+  border: 2px solid #ffffff;
+}
+
+/* ========================================
+   PEN WIDTH CONTROL
+======================================== */
+
+.pen-width-control {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.pen-width-control input[type="range"] {
+  flex: 1;
+
+  min-width: 0;
+
+  cursor: pointer;
+}
+
+.pen-width-value {
+  min-width: 42px;
+
+  padding: 5px 6px;
+
+  background: #161b21;
+  color: #ffffff;
+
+  border: 1px solid #303743;
+  border-radius: 4px;
+
+  text-align: center;
+
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* ========================================
+   PEN SETTINGS
+======================================== */
+
+.pen-setting-block {
+  margin-bottom: 12px;
+}
+
+.pen-setting-block:last-child {
+  margin-bottom: 0;
+}
+
+.pen-setting-label {
+  margin-bottom: 6px;
+
+  color: #7f8995;
+
+  font-size: 10px;
+  font-weight: bold;
+
+  letter-spacing: 1px;
+}
+
+/* ========================================
+   PEN WIDTH
+======================================== */
+
+.pen-width-control {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.pen-width-control input[type="range"] {
+  flex: 1;
+
+  min-width: 0;
+
+  cursor: pointer;
+}
+
+.pen-width-value {
+  min-width: 42px;
+
+  padding: 5px 6px;
+
+  background: #161b21;
+  color: #ffffff;
+
+  border: 1px solid #303743;
+  border-radius: 4px;
+
+  text-align: center;
+
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* ========================================
+   PEN COLORS
+======================================== */
+
+.pen-color-grid {
+  display: grid;
+
+  grid-template-columns: repeat(6, 1fr);
+
+  gap: 5px;
+}
+
+.pen-color-button {
+  width: 100%;
+
+  aspect-ratio: 1 / 1;
+
+  padding: 0;
+
+  border: 2px solid #303743;
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.12s ease,
+    border-color 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.pen-color-button:hover {
+  transform: scale(1.08);
+
+  border-color: #8d949e;
+}
+
+.pen-color-button.active {
+  border-color: #ffffff;
+
+  box-shadow:
+    0 0 0 2px #d9a514;
 }
