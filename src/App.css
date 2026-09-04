@@ -18,7 +18,8 @@ body {
 }
 
 button,
-select {
+select,
+input {
   font: inherit;
 }
 
@@ -237,6 +238,186 @@ select {
 }
 
 /* ========================================
+   PEN SETTINGS
+======================================== */
+
+.pen-setting-block {
+  margin-bottom: 12px;
+}
+
+.pen-setting-block:last-child {
+  margin-bottom: 0;
+}
+
+.pen-setting-label {
+  margin-bottom: 6px;
+
+  color: #7f8995;
+
+  font-size: 10px;
+  font-weight: bold;
+
+  letter-spacing: 1px;
+}
+
+/* ========================================
+   PEN WIDTH
+======================================== */
+
+.pen-width-control {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.pen-width-control input[type="range"] {
+  flex: 1;
+
+  min-width: 0;
+
+  cursor: pointer;
+}
+
+.pen-width-value {
+  min-width: 42px;
+
+  padding: 5px 6px;
+
+  background: #161b21;
+  color: #ffffff;
+
+  border: 1px solid #303743;
+  border-radius: 4px;
+
+  text-align: center;
+
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* ========================================
+   PEN COLORS
+======================================== */
+
+.pen-color-grid {
+  display: grid;
+
+  grid-template-columns: repeat(6, 1fr);
+
+  gap: 5px;
+}
+
+.pen-color-button {
+  width: 100%;
+
+  aspect-ratio: 1 / 1;
+
+  padding: 0;
+
+  border: 2px solid #303743;
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.12s ease,
+    border-color 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.pen-color-button:hover {
+  transform: scale(1.08);
+
+  border-color: #8d949e;
+}
+
+.pen-color-button.active {
+  border-color: #ffffff;
+
+  box-shadow:
+    0 0 0 2px #d9a514;
+}
+
+/* ========================================
+   TEXT SETTINGS
+======================================== */
+
+.text-setting-block {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 7px;
+}
+
+.text-input {
+  width: 100%;
+
+  padding: 9px 10px;
+
+  background: #161b21;
+  color: #ffffff;
+
+  border: 1px solid #303743;
+  border-radius: 5px;
+
+  outline: none;
+
+  font-size: 12px;
+}
+
+.text-input::placeholder {
+  color: #626c78;
+}
+
+.text-input:hover {
+  border-color: #4a525e;
+}
+
+.text-input:focus {
+  border-color: #d9a514;
+}
+
+.text-place-button {
+  width: 100%;
+
+  padding: 9px;
+
+  background: #1a2028;
+  color: #abb3bd;
+
+  border: 1px solid #303743;
+  border-radius: 5px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease;
+}
+
+.text-place-button:hover:not(:disabled) {
+  background: #252c35;
+}
+
+.text-place-button.active {
+  background: #d9a514;
+
+  border-color: #e8ba39;
+
+  color: #0d0f12;
+
+  font-weight: bold;
+}
+
+.text-place-button:disabled {
+  opacity: 0.4;
+
+  cursor: not-allowed;
+}
+
+/* ========================================
    MARKERS
 ======================================== */
 
@@ -318,7 +499,6 @@ select {
 
 /* ========================================
    COMMON GADGET BUTTON
-   OPERATORと同じ46×46
 ======================================== */
 
 .gadget-button {
@@ -641,7 +821,6 @@ select {
 
 /* ========================================
    UNIQUE GADGET BUTTON
-   OPERATORと同じ46×46
 ======================================== */
 
 .operator-gadget-button {
@@ -695,54 +874,14 @@ select {
 }
 
 /* ========================================
-   PEN WIDTH CONTROL
+   TEXT OPTIONS
 ======================================== */
 
-.pen-width-control {
-  display: flex;
-  align-items: center;
-
-  gap: 10px;
+.text-option-block {
+  margin-top: 10px;
 }
 
-.pen-width-control input[type="range"] {
-  flex: 1;
-
-  min-width: 0;
-
-  cursor: pointer;
-}
-
-.pen-width-value {
-  min-width: 42px;
-
-  padding: 5px 6px;
-
-  background: #161b21;
-  color: #ffffff;
-
-  border: 1px solid #303743;
-  border-radius: 4px;
-
-  text-align: center;
-
-  font-size: 12px;
-  font-weight: bold;
-}
-
-/* ========================================
-   PEN SETTINGS
-======================================== */
-
-.pen-setting-block {
-  margin-bottom: 12px;
-}
-
-.pen-setting-block:last-child {
-  margin-bottom: 0;
-}
-
-.pen-setting-label {
+.text-option-label {
   margin-bottom: 6px;
 
   color: #7f8995;
@@ -754,17 +893,17 @@ select {
 }
 
 /* ========================================
-   PEN WIDTH
+   TEXT SIZE
 ======================================== */
 
-.pen-width-control {
+.text-size-control {
   display: flex;
   align-items: center;
 
   gap: 10px;
 }
 
-.pen-width-control input[type="range"] {
+.text-size-control input[type="range"] {
   flex: 1;
 
   min-width: 0;
@@ -772,8 +911,8 @@ select {
   cursor: pointer;
 }
 
-.pen-width-value {
-  min-width: 42px;
+.text-size-value {
+  min-width: 48px;
 
   padding: 5px 6px;
 
@@ -790,10 +929,10 @@ select {
 }
 
 /* ========================================
-   PEN COLORS
+   TEXT COLORS
 ======================================== */
 
-.pen-color-grid {
+.text-color-grid {
   display: grid;
 
   grid-template-columns: repeat(6, 1fr);
@@ -801,7 +940,7 @@ select {
   gap: 5px;
 }
 
-.pen-color-button {
+.text-color-button {
   width: 100%;
 
   aspect-ratio: 1 / 1;
@@ -819,13 +958,13 @@ select {
     box-shadow 0.12s ease;
 }
 
-.pen-color-button:hover {
+.text-color-button:hover {
   transform: scale(1.08);
 
   border-color: #8d949e;
 }
 
-.pen-color-button.active {
+.text-color-button.active {
   border-color: #ffffff;
 
   box-shadow:

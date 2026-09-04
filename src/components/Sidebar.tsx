@@ -26,6 +26,24 @@ type SidebarProps = {
     React.SetStateAction<string>
   >
 
+  textValue: string
+
+  setTextValue: React.Dispatch<
+    React.SetStateAction<string>
+  >
+
+  textFontSize: number
+
+  setTextFontSize: React.Dispatch<
+    React.SetStateAction<number>
+  >
+
+  textColor: string
+
+  setTextColor: React.Dispatch<
+    React.SetStateAction<string>
+  >
+
   mapId: MapId
 
   selectedMap: MapDefinition
@@ -90,6 +108,33 @@ const PEN_COLORS = [
   },
 ]
 
+const TEXT_COLORS = [
+  {
+    name: 'White',
+    value: '#ffffff',
+  },
+  {
+    name: 'Red',
+    value: '#ef4444',
+  },
+  {
+    name: 'Blue',
+    value: '#3b82f6',
+  },
+  {
+    name: 'Green',
+    value: '#22c55e',
+  },
+  {
+    name: 'Yellow',
+    value: '#eab308',
+  },
+  {
+    name: 'Purple',
+    value: '#a855f7',
+  },
+]
+
 function numberToAlphabet(index: number) {
   let result = ''
   let number = index + 1
@@ -119,6 +164,15 @@ function Sidebar({
 
   penColor,
   setPenColor,
+
+  textValue,
+  setTextValue,
+
+  textFontSize,
+  setTextFontSize,
+
+  textColor,
+  setTextColor,
 
   mapId,
   selectedMap,
@@ -262,6 +316,22 @@ function Sidebar({
           >
             ERASER
           </button>
+
+          <button
+            type="button"
+            className={
+              selectedToolClass(
+                'text'
+              )
+            }
+            onClick={() =>
+              setTool(
+                'text'
+              )
+            }
+          >
+            TEXT
+          </button>
         </div>
       </section>
 
@@ -271,8 +341,6 @@ function Sidebar({
         <div className="sidebar-section-title">
           PEN SETTINGS
         </div>
-
-        {/* PEN WIDTH */}
 
         <div className="pen-setting-block">
           <div className="pen-setting-label">
@@ -300,8 +368,6 @@ function Sidebar({
             </div>
           </div>
         </div>
-
-        {/* PEN COLOR */}
 
         <div className="pen-setting-block">
           <div className="pen-setting-label">
@@ -347,6 +413,135 @@ function Sidebar({
               }
             )}
           </div>
+        </div>
+      </section>
+
+      {/* TEXT */}
+
+      <section className="sidebar-section">
+        <div className="sidebar-section-title">
+          TEXT
+        </div>
+
+        <div className="text-setting-block">
+
+          {/* INPUT */}
+
+          <input
+            type="text"
+            className="text-input"
+            placeholder="Enter text..."
+            value={textValue}
+            onChange={(e) =>
+              setTextValue(
+                e.target.value
+              )
+            }
+            onKeyDown={(e) => {
+              if (
+                e.key === 'Enter' &&
+                textValue.trim()
+              ) {
+                setTool(
+                  'text'
+                )
+              }
+            }}
+          />
+
+          {/* SIZE */}
+
+          <div className="text-option-block">
+            <div className="text-option-label">
+              SIZE
+            </div>
+
+            <div className="text-size-control">
+              <input
+                type="range"
+                min="12"
+                max="60"
+                step="1"
+                value={textFontSize}
+                onChange={(e) =>
+                  setTextFontSize(
+                    Number(
+                      e.target.value
+                    )
+                  )
+                }
+              />
+
+              <div className="text-size-value">
+                {textFontSize}px
+              </div>
+            </div>
+          </div>
+
+          {/* COLOR */}
+
+          <div className="text-option-block">
+            <div className="text-option-label">
+              COLOR
+            </div>
+
+            <div className="text-color-grid">
+              {TEXT_COLORS.map(
+                (color) => {
+                  const isActive =
+                    textColor ===
+                    color.value
+
+                  return (
+                    <button
+                      key={
+                        color.value
+                      }
+                      type="button"
+                      title={
+                        color.name
+                      }
+                      className={
+                        isActive
+                          ? 'text-color-button active'
+                          : 'text-color-button'
+                      }
+                      style={{
+                        backgroundColor:
+                          color.value,
+                      }}
+                      onClick={() => {
+                        setTextColor(
+                          color.value
+                        )
+                      }}
+                    />
+                  )
+                }
+              )}
+            </div>
+          </div>
+
+          {/* PLACE */}
+
+          <button
+            type="button"
+            className={
+              tool === 'text'
+                ? 'text-place-button active'
+                : 'text-place-button'
+            }
+            disabled={
+              !textValue.trim()
+            }
+            onClick={() =>
+              setTool(
+                'text'
+              )
+            }
+          >
+            PLACE TEXT
+          </button>
         </div>
       </section>
 
@@ -512,6 +707,16 @@ function Sidebar({
 
             <strong>
               {penWidth}px
+            </strong>
+          </div>
+
+          <div className="status-row">
+            <span>
+              TEXT SIZE
+            </span>
+
+            <strong>
+              {textFontSize}px
             </strong>
           </div>
         </div>

@@ -20,6 +20,7 @@ import type {
   Tool,
   PenObject,
   Marker,
+  TextItem,
   OperatorDefinition,
   OperatorItem,
   GadgetDefinition,
@@ -65,6 +66,10 @@ type BoardCanvasProps = {
   penWidth: number
   penColor: string
 
+  textValue: string
+  textFontSize: number
+  textColor: string
+
   imagePath: string
 
   penObjects: PenObject[]
@@ -75,6 +80,11 @@ type BoardCanvasProps = {
   markers: Marker[]
   setMarkers: React.Dispatch<
     React.SetStateAction<Marker[]>
+  >
+
+  textItems: TextItem[]
+  setTextItems: React.Dispatch<
+    React.SetStateAction<TextItem[]>
   >
 
   alphabetCount: number
@@ -313,6 +323,10 @@ function BoardCanvas({
   penWidth,
   penColor,
 
+  textValue,
+  textFontSize,
+  textColor,
+
   imagePath,
 
   penObjects,
@@ -320,6 +334,9 @@ function BoardCanvas({
 
   markers,
   setMarkers,
+
+  textItems,
+  setTextItems,
 
   alphabetCount,
   setAlphabetCount,
@@ -515,6 +532,47 @@ function BoardCanvas({
               ],
             })
           )
+      )
+
+      return
+    }
+
+    if (
+      tool === 'text'
+    ) {
+      const trimmedText =
+        textValue.trim()
+
+      if (
+        !trimmedText
+      ) {
+        return
+      }
+
+      setTextItems(
+        (current) => [
+          ...current,
+
+          {
+            id:
+              crypto.randomUUID(),
+
+            x:
+              pointer.x,
+
+            y:
+              pointer.y,
+
+            text:
+              trimmedText,
+
+            fontSize:
+              textFontSize,
+
+            color:
+              textColor,
+          },
+        ]
       )
 
       return
@@ -937,6 +995,38 @@ function BoardCanvas({
     )
   }
 
+  const moveTextItem = (
+    id: string,
+    x: number,
+    y: number
+  ) => {
+    setTextItems(
+      (current) =>
+        current.map(
+          (item) =>
+            item.id === id
+              ? {
+                  ...item,
+                  x,
+                  y,
+                }
+              : item
+        )
+    )
+  }
+
+  const deleteTextItem = (
+    id: string
+  ) => {
+    setTextItems(
+      (current) =>
+        current.filter(
+          (item) =>
+            item.id !== id
+        )
+    )
+  }
+
   const moveOperator = (
     id: string,
     x: number,
@@ -1114,17 +1204,13 @@ function BoardCanvas({
                   points={
                     penObject.points
                   }
-
                   stroke={
                     penObject.strokeColor
                   }
-
                   strokeWidth={
                     penObject.strokeWidth
                   }
-
                   lineCap="round"
-
                   lineJoin="round"
                 />
 
@@ -1137,21 +1223,15 @@ function BoardCanvas({
                       key={
                         index
                       }
-
                       points={
                         erasePath
                       }
-
                       stroke="black"
-
                       strokeWidth={
                         22
                       }
-
                       lineCap="round"
-
                       lineJoin="round"
-
                       globalCompositeOperation="destination-out"
                     />
                   )
@@ -1170,20 +1250,16 @@ function BoardCanvas({
                 key={
                   marker.id
                 }
-
                 x={
                   marker.x
                 }
-
                 y={
                   marker.y
                 }
-
                 draggable={
                   tool ===
                   'select'
                 }
-
                 onDragEnd={(e) =>
                   moveMarker(
                     marker.id,
@@ -1191,7 +1267,6 @@ function BoardCanvas({
                     e.target.y()
                   )
                 }
-
                 onMouseDown={(e) => {
                   if (
                     tool !==
@@ -1213,7 +1288,6 @@ function BoardCanvas({
                   <>
                     <Circle
                       radius={18}
-
                       fill={
                         marker.color
                       }
@@ -1223,20 +1297,13 @@ function BoardCanvas({
                       text={
                         marker.label
                       }
-
                       x={-18}
                       y={-9}
-
                       width={36}
-
                       align="center"
-
                       fill="#111111"
-
                       fontSize={18}
-
                       fontStyle="bold"
-
                       listening={
                         false
                       }
@@ -1247,14 +1314,11 @@ function BoardCanvas({
                     <Rect
                       x={-18}
                       y={-18}
-
                       width={36}
                       height={36}
-
                       fill={
                         marker.color
                       }
-
                       cornerRadius={
                         3
                       }
@@ -1264,26 +1328,84 @@ function BoardCanvas({
                       text={
                         marker.label
                       }
-
                       x={-18}
                       y={-9}
-
                       width={36}
-
                       align="center"
-
                       fill="#ffffff"
-
                       fontSize={18}
-
                       fontStyle="bold"
-
                       listening={
                         false
                       }
                     />
                   </>
                 )}
+              </Group>
+            )
+          )}
+        </Layer>
+
+        {/* TEXT */}
+
+        <Layer>
+          {textItems.map(
+            (item) => (
+              <Group
+                key={
+                  item.id
+                }
+                x={
+                  item.x
+                }
+                y={
+                  item.y
+                }
+                draggable={
+                  tool ===
+                  'select'
+                }
+                onDragEnd={(e) =>
+                  moveTextItem(
+                    item.id,
+                    e.target.x(),
+                    e.target.y()
+                  )
+                }
+                onMouseDown={(e) => {
+                  if (
+                    tool !==
+                    'eraser'
+                  ) {
+                    return
+                  }
+
+                  e.cancelBubble =
+                    true
+
+                  deleteTextItem(
+                    item.id
+                  )
+                }}
+              >
+                <Text
+                  text={
+                    item.text
+                  }
+                  fill={
+                    item.color
+                  }
+                  fontSize={
+                    item.fontSize
+                  }
+                  fontStyle="bold"
+                  padding={4}
+                  shadowColor="#000000"
+                  shadowBlur={4}
+                  shadowOpacity={0.8}
+                  shadowOffsetX={1}
+                  shadowOffsetY={1}
+                />
               </Group>
             )
           )}

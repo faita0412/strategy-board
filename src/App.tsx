@@ -15,6 +15,7 @@ import type {
   Tool,
   PenObject,
   Marker,
+  TextItem,
   OperatorItem,
   GadgetItem,
   OperatorGadgetItem,
@@ -60,6 +61,19 @@ function App() {
   const [penColor, setPenColor] =
     useState('#ffffff')
 
+  const [textValue, setTextValue] =
+    useState('')
+
+  const [
+    textFontSize,
+    setTextFontSize,
+  ] = useState(24)
+
+  const [
+    textColor,
+    setTextColor,
+  ] = useState('#ffffff')
+
   const mapIds =
     Object.keys(MAPS) as MapId[]
 
@@ -100,6 +114,11 @@ function App() {
     markers,
     setMarkers,
   ] = useState<Marker[]>([])
+
+  const [
+    textItems,
+    setTextItems,
+  ] = useState<TextItem[]>([])
 
   const [
     alphabetCount,
@@ -190,6 +209,7 @@ function App() {
 
     setPenObjects([])
     setMarkers([])
+    setTextItems([])
     setOperatorItems([])
     setGadgetItems([])
     setOperatorGadgetItems([])
@@ -208,6 +228,8 @@ function App() {
     setSelectedOperatorGadgetId(
       null
     )
+
+    setTextValue('')
 
     setTool(
       'select'
@@ -281,6 +303,7 @@ function App() {
   const clearBoard = () => {
     setPenObjects([])
     setMarkers([])
+    setTextItems([])
     setOperatorItems([])
     setGadgetItems([])
     setOperatorGadgetItems([])
@@ -299,6 +322,8 @@ function App() {
     setSelectedOperatorGadgetId(
       null
     )
+
+    setTextValue('')
 
     setTool(
       'select'
@@ -352,6 +377,30 @@ function App() {
 
           setPenColor={
             setPenColor
+          }
+
+          textValue={
+            textValue
+          }
+
+          setTextValue={
+            setTextValue
+          }
+
+          textFontSize={
+            textFontSize
+          }
+
+          setTextFontSize={
+            setTextFontSize
+          }
+
+          textColor={
+            textColor
+          }
+
+          setTextColor={
+            setTextColor
           }
 
           mapId={
@@ -419,6 +468,18 @@ function App() {
               penColor
             }
 
+            textValue={
+              textValue
+            }
+
+            textFontSize={
+              textFontSize
+            }
+
+            textColor={
+              textColor
+            }
+
             imagePath={
               currentFloor
                 ?.image ?? ''
@@ -438,6 +499,14 @@ function App() {
 
             setMarkers={
               setMarkers
+            }
+
+            textItems={
+              textItems
+            }
+
+            setTextItems={
+              setTextItems
             }
 
             alphabetCount={

@@ -7,6 +7,7 @@ export type Tool =
   | 'operator'
   | 'gadget'
   | 'operatorGadget'
+  | 'text'
 
 export type PenObject = {
   id: string
@@ -34,6 +35,18 @@ export type Marker = {
   kind:
     | 'alphabet'
     | 'number'
+}
+
+export type TextItem = {
+  id: string
+
+  x: number
+  y: number
+
+  text: string
+
+  fontSize: number
+  color: string
 }
 
 export type OperatorDefinition = {
