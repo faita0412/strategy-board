@@ -582,6 +582,13 @@ export const OPERATORS: OperatorDefinition[] = [
   },
 
   {
+    id: 'denari',
+    name: 'Denari',
+    image: '/icons/operators/defense/denari.png',
+    side: 'defense',
+  },
+
+  {
     id: 'noor',
     name: 'Noor',
     image: '/icons/operators/defense/noor.png',
