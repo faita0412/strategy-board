@@ -23,6 +23,9 @@ import type {
 
 import './App.css'
 
+const BOARD_CENTER_X = 675
+const BOARD_CENTER_Y = 450
+
 export const NUMBER_COLORS: Record<number, string> = {
   1: '#ef4444',
   2: '#3b82f6',
@@ -180,15 +183,6 @@ function App() {
       floor
     ]
 
-  const selectedOperatorGadgets =
-    selectedOperatorId
-      ? OPERATOR_GADGETS.filter(
-          (gadget) =>
-            gadget.operatorId ===
-            selectedOperatorId
-        )
-      : []
-
   const handleMapChange = (
     newMapId: MapId
   ) => {
@@ -244,11 +238,51 @@ function App() {
     )
   }
 
+  /* ========================================
+     AUTO PLACE OPERATOR
+  ======================================== */
+
   const handleOperatorSelect = (
     operatorId: string
   ) => {
+    const operator =
+      OPERATORS.find(
+        (item) =>
+          item.id === operatorId
+      )
+
+    if (!operator) {
+      return
+    }
+
+    setOperatorItems(
+      (current) => [
+        ...current,
+
+        {
+          id:
+            crypto.randomUUID(),
+
+          x:
+            BOARD_CENTER_X,
+
+          y:
+            BOARD_CENTER_Y,
+
+          operatorId:
+            operator.id,
+
+          name:
+            operator.name,
+
+          image:
+            operator.image,
+        },
+      ]
+    )
+
     setSelectedOperatorId(
-      operatorId
+      null
     )
 
     setSelectedGadgetId(
@@ -260,43 +294,221 @@ function App() {
     )
 
     setTool(
-      'operator'
+      'select'
     )
   }
+
+  /* ========================================
+     AUTO PLACE COMMON GADGET
+  ======================================== */
 
   const handleGadgetSelect = (
     gadgetId: string
   ) => {
-    setSelectedGadgetId(
-      gadgetId
+    const gadget =
+      GADGETS.find(
+        (item) =>
+          item.id === gadgetId
+      )
+
+    if (!gadget) {
+      return
+    }
+
+    setGadgetItems(
+      (current) => [
+        ...current,
+
+        {
+          id:
+            crypto.randomUUID(),
+
+          x:
+            BOARD_CENTER_X,
+
+          y:
+            BOARD_CENTER_Y,
+
+          gadgetId:
+            gadget.id,
+
+          name:
+            gadget.name,
+
+          image:
+            gadget.image,
+        },
+      ]
     )
 
     setSelectedOperatorId(
       null
     )
 
+    setSelectedGadgetId(
+      null
+    )
+
     setSelectedOperatorGadgetId(
       null
     )
 
     setTool(
-      'gadget'
+      'select'
     )
   }
+
+  /* ========================================
+     AUTO PLACE UNIQUE GADGET
+  ======================================== */
 
   const handleOperatorGadgetSelect = (
     operatorGadgetId: string
   ) => {
-    setSelectedOperatorGadgetId(
-      operatorGadgetId
+    const gadget =
+      OPERATOR_GADGETS.find(
+        (item) =>
+          item.id ===
+          operatorGadgetId
+      )
+
+    if (!gadget) {
+      return
+    }
+
+    setOperatorGadgetItems(
+      (current) => [
+        ...current,
+
+        {
+          id:
+            crypto.randomUUID(),
+
+          x:
+            BOARD_CENTER_X,
+
+          y:
+            BOARD_CENTER_Y,
+
+          operatorGadgetId:
+            gadget.id,
+
+          operatorId:
+            gadget.operatorId,
+
+          name:
+            gadget.name,
+
+          image:
+            gadget.image,
+        },
+      ]
+    )
+
+    setSelectedOperatorId(
+      null
     )
 
     setSelectedGadgetId(
       null
     )
 
+    setSelectedOperatorGadgetId(
+      null
+    )
+
     setTool(
-      'operatorGadget'
+      'select'
+    )
+  }
+
+  /* ========================================
+     AUTO PLACE ALPHABET
+  ======================================== */
+
+  const handleAlphabetMarkerAdd = () => {
+    const label =
+      numberToAlphabet(
+        alphabetCount
+      )
+
+    setMarkers(
+      (current) => [
+        ...current,
+
+        {
+          id:
+            crypto.randomUUID(),
+
+          x:
+            BOARD_CENTER_X,
+
+          y:
+            BOARD_CENTER_Y,
+
+          label,
+
+          color:
+            '#f59e0b',
+
+          kind:
+            'alphabet',
+        },
+      ]
+    )
+
+    setAlphabetCount(
+      alphabetCount + 1
+    )
+
+    setTool(
+      'select'
+    )
+  }
+
+  /* ========================================
+     AUTO PLACE NUMBER
+  ======================================== */
+
+  const handleNumberMarkerAdd = () => {
+    setMarkers(
+      (current) => [
+        ...current,
+
+        {
+          id:
+            crypto.randomUUID(),
+
+          x:
+            BOARD_CENTER_X,
+
+          y:
+            BOARD_CENTER_Y,
+
+          label:
+            String(
+              numberCount
+            ),
+
+          color:
+            NUMBER_COLORS[
+              numberCount
+            ],
+
+          kind:
+            'number',
+        },
+      ]
+    )
+
+    setNumberCount(
+      numberCount === 5
+        ? 1
+        : numberCount + 1
+    )
+
+    setTool(
+      'select'
     )
   }
 
@@ -437,6 +649,14 @@ function App() {
 
           onGadgetSelect={
             handleGadgetSelect
+          }
+
+          onAlphabetMarkerAdd={
+            handleAlphabetMarkerAdd
+          }
+
+          onNumberMarkerAdd={
+            handleNumberMarkerAdd
           }
 
           onMapChange={
@@ -592,7 +812,7 @@ function App() {
             }
 
             operatorGadgets={
-              selectedOperatorGadgets
+              OPERATOR_GADGETS
             }
 
             selectedOperatorGadgetId={

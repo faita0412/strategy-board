@@ -64,6 +64,10 @@ type SidebarProps = {
     gadgetId: string
   ) => void
 
+  onAlphabetMarkerAdd: () => void
+
+  onNumberMarkerAdd: () => void
+
   onMapChange: (
     mapId: MapId
   ) => void
@@ -187,6 +191,9 @@ function Sidebar({
   selectedGadgetId,
 
   onGadgetSelect,
+
+  onAlphabetMarkerAdd,
+  onNumberMarkerAdd,
 
   onMapChange,
   onFloorChange,
@@ -425,8 +432,6 @@ function Sidebar({
 
         <div className="text-setting-block">
 
-          {/* INPUT */}
-
           <input
             type="text"
             className="text-input"
@@ -510,11 +515,11 @@ function Sidebar({
                         backgroundColor:
                           color.value,
                       }}
-                      onClick={() => {
+                      onClick={() =>
                         setTextColor(
                           color.value
                         )
-                      }}
+                      }
                     />
                   )
                 }
@@ -522,7 +527,7 @@ function Sidebar({
             </div>
           </div>
 
-          {/* PLACE */}
+          {/* PLACE TEXT */}
 
           <button
             type="button"
@@ -553,18 +558,14 @@ function Sidebar({
         </div>
 
         <div className="marker-buttons">
+
+          {/* ALPHABET */}
+
           <button
             type="button"
-            className={
-              tool ===
-              'markerAlphabet'
-                ? 'marker-button alphabet active'
-                : 'marker-button alphabet'
-            }
-            onClick={() =>
-              setTool(
-                'markerAlphabet'
-              )
+            className="marker-button alphabet"
+            onClick={
+              onAlphabetMarkerAdd
             }
           >
             <span className="marker-preview alphabet">
@@ -578,18 +579,13 @@ function Sidebar({
             </span>
           </button>
 
+          {/* NUMBER */}
+
           <button
             type="button"
-            className={
-              tool ===
-              'markerNumber'
-                ? 'marker-button number active'
-                : 'marker-button number'
-            }
-            onClick={() =>
-              setTool(
-                'markerNumber'
-              )
+            className="marker-button number"
+            onClick={
+              onNumberMarkerAdd
             }
           >
             <span
@@ -608,6 +604,7 @@ function Sidebar({
               NUMBER
             </span>
           </button>
+
         </div>
       </section>
 
@@ -670,6 +667,7 @@ function Sidebar({
         </div>
 
         <div className="status-box">
+
           <div className="status-row">
             <span>
               MAP
@@ -719,6 +717,7 @@ function Sidebar({
               {textFontSize}px
             </strong>
           </div>
+
         </div>
       </section>
 

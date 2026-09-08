@@ -635,7 +635,7 @@ input {
 ======================================== */
 
 .operator-panel {
-  width: 1102px;
+  width: 1352px;
 
   margin-top: 12px;
 
@@ -724,7 +724,9 @@ input {
 ======================================== */
 
 .operator-list {
-  flex: 1;
+  flex: 1 1 0;
+
+  min-width: 0;
 
   display: flex;
 
@@ -788,9 +790,9 @@ input {
 ======================================== */
 
 .operator-gadget-area {
-  flex: 0 0 auto;
+  flex: 0 0 420px;
 
-  min-width: 70px;
+  min-width: 420px;
 
   padding-left: 12px;
 

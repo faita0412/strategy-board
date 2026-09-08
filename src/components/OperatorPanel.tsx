@@ -59,6 +59,23 @@ function OperatorPanel({
         selectedSide
     )
 
+  const filteredOperatorGadgets =
+    operatorGadgets.filter(
+      (gadget) => {
+        const operator =
+          operators.find(
+            (item) =>
+              item.id ===
+              gadget.operatorId
+          )
+
+        return (
+          operator?.side ===
+          selectedSide
+        )
+      }
+    )
+
   return (
     <div className="operator-panel">
 
@@ -170,75 +187,70 @@ function OperatorPanel({
 
         </div>
 
-        {/* UNIQUE GADGET */}
+        {/* UNIQUE GADGETS */}
 
-        {selectedOperatorId &&
-          operatorGadgets.length > 0 && (
+        <div className="operator-gadget-area">
 
-            <div className="operator-gadget-area">
+          <div className="operator-gadget-title">
+            UNIQUE GADGETS
+          </div>
 
-              <div className="operator-gadget-title">
-                UNIQUE GADGET
-              </div>
+          <div className="operator-gadget-list">
 
-              <div className="operator-gadget-list">
+            {filteredOperatorGadgets.map(
+              (gadget) => {
+                const isActive =
+                  selectedOperatorGadgetId ===
+                    gadget.id &&
+                  tool ===
+                    'operatorGadget'
 
-                {operatorGadgets.map(
-                  (gadget) => {
-                    const isActive =
-                      selectedOperatorGadgetId ===
-                        gadget.id &&
-                      tool ===
-                        'operatorGadget'
+                return (
+                  <button
+                    key={
+                      gadget.id
+                    }
 
-                    return (
-                      <button
-                        key={
-                          gadget.id
-                        }
+                    type="button"
 
-                        type="button"
+                    title={
+                      gadget.name
+                    }
 
-                        title={
-                          gadget.name
-                        }
+                    className={
+                      isActive
+                        ? 'operator-gadget-button active'
+                        : 'operator-gadget-button'
+                    }
 
-                        className={
-                          isActive
-                            ? 'operator-gadget-button active'
-                            : 'operator-gadget-button'
-                        }
+                    onClick={() =>
+                      onOperatorGadgetSelect(
+                        gadget.id
+                      )
+                    }
+                  >
+                    <img
+                      src={
+                        gadget.image
+                      }
 
-                        onClick={() =>
-                          onOperatorGadgetSelect(
-                            gadget.id
-                          )
-                        }
-                      >
-                        <img
-                          src={
-                            gadget.image
-                          }
+                      alt={
+                        gadget.name
+                      }
 
-                          alt={
-                            gadget.name
-                          }
+                      onError={(e) => {
+                        e.currentTarget.style.display =
+                          'none'
+                      }}
+                    />
+                  </button>
+                )
+              }
+            )}
 
-                          onError={(e) => {
-                            e.currentTarget.style.display =
-                              'none'
-                          }}
-                        />
-                      </button>
-                    )
-                  }
-                )}
+          </div>
 
-              </div>
-
-            </div>
-
-          )}
+        </div>
 
       </div>
 
