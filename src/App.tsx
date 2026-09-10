@@ -3,6 +3,7 @@ import { useState } from 'react'
 import BoardCanvas from './components/BoardCanvas'
 import Sidebar from './components/Sidebar'
 import OperatorPanel from './components/OperatorPanel'
+import RightSidebar from './components/RightSidebar'
 
 import { MAPS } from './data/maps'
 import type { MapId } from './data/maps'
@@ -16,6 +17,7 @@ import type {
   PenObject,
   Marker,
   TextItem,
+  OperatorDefinition,
   OperatorItem,
   GadgetItem,
   OperatorGadgetItem,
@@ -23,7 +25,7 @@ import type {
 
 import './App.css'
 
-const BOARD_CENTER_X = 675
+const BOARD_CENTER_X = 775
 const BOARD_CENTER_Y = 450
 
 export const NUMBER_COLORS: Record<number, string> = {
@@ -55,14 +57,26 @@ export function numberToAlphabet(index: number) {
 }
 
 function App() {
+  /* ========================================
+     TOOL
+  ======================================== */
+
   const [tool, setTool] =
     useState<Tool>('select')
+
+  /* ========================================
+     PEN
+  ======================================== */
 
   const [penWidth, setPenWidth] =
     useState(4)
 
   const [penColor, setPenColor] =
     useState('#ffffff')
+
+  /* ========================================
+     TEXT
+  ======================================== */
 
   const [textValue, setTextValue] =
     useState('')
@@ -76,6 +90,10 @@ function App() {
     textColor,
     setTextColor,
   ] = useState('#ffffff')
+
+  /* ========================================
+     MAP
+  ======================================== */
 
   const mapIds =
     Object.keys(MAPS) as MapId[]
@@ -108,20 +126,23 @@ function App() {
       selectedMap.defaultFloor
     )
 
+  /* ========================================
+     PEN OBJECTS
+  ======================================== */
+
   const [
     penObjects,
     setPenObjects,
   ] = useState<PenObject[]>([])
 
+  /* ========================================
+     MARKERS
+  ======================================== */
+
   const [
     markers,
     setMarkers,
   ] = useState<Marker[]>([])
-
-  const [
-    textItems,
-    setTextItems,
-  ] = useState<TextItem[]>([])
 
   const [
     alphabetCount,
@@ -132,6 +153,19 @@ function App() {
     numberCount,
     setNumberCount,
   ] = useState(1)
+
+  /* ========================================
+     TEXT ITEMS
+  ======================================== */
+
+  const [
+    textItems,
+    setTextItems,
+  ] = useState<TextItem[]>([])
+
+  /* ========================================
+     OPERATORS
+  ======================================== */
 
   const [
     operatorItems,
@@ -145,6 +179,10 @@ function App() {
     null
   )
 
+  /* ========================================
+     COMMON GADGETS
+  ======================================== */
+
   const [
     gadgetItems,
     setGadgetItems,
@@ -156,6 +194,10 @@ function App() {
   ] = useState<string | null>(
     null
   )
+
+  /* ========================================
+     UNIQUE GADGETS
+  ======================================== */
 
   const [
     operatorGadgetItems,
@@ -173,6 +215,38 @@ function App() {
       null
     )
 
+  /* ========================================
+     RIGHT SIDEBAR
+  ======================================== */
+
+  const [
+    selectedDefenseOperators,
+    setSelectedDefenseOperators,
+  ] = useState<
+    (OperatorDefinition | null)[]
+  >([
+    null,
+    null,
+    null,
+    null,
+    null,
+  ])
+
+  const [
+    defenseNotes,
+    setDefenseNotes,
+  ] = useState<string[]>([
+    '',
+    '',
+    '',
+    '',
+    '',
+  ])
+
+  /* ========================================
+     CURRENT MAP
+  ======================================== */
+
   const floorKeys =
     Object.keys(
       selectedMap.floors
@@ -182,6 +256,140 @@ function App() {
     selectedMap.floors[
       floor
     ]
+
+  /* ========================================
+     DEFENSE OPERATOR REGISTER
+  ======================================== */
+
+  const handleDefenseOperatorSelect = (
+    operatorId: string
+  ) => {
+    const operator =
+      OPERATORS.find(
+        (item) =>
+          item.id ===
+          operatorId
+      )
+
+    if (
+      !operator ||
+      operator.side !==
+        'defense'
+    ) {
+      return
+    }
+
+    setSelectedDefenseOperators(
+      (current) => {
+        /*
+          同じオペレーターが
+          登録済みなら追加しない
+        */
+
+        const alreadyExists =
+          current.some(
+            (item) =>
+              item?.id ===
+              operator.id
+          )
+
+        if (
+          alreadyExists
+        ) {
+          return current
+        }
+
+        /*
+          1～5の最初の空き枠
+        */
+
+        const emptyIndex =
+          current.findIndex(
+            (item) =>
+              item === null
+          )
+
+        if (
+          emptyIndex === -1
+        ) {
+          return current
+        }
+
+        const next = [
+          ...current,
+        ]
+
+        next[
+          emptyIndex
+        ] = operator
+
+        return next
+      }
+    )
+  }
+
+  /* ========================================
+     DEFENSE NOTE
+  ======================================== */
+
+  const handleDefenseNoteChange = (
+    index: number,
+    value: string
+  ) => {
+    setDefenseNotes(
+      (current) =>
+        current.map(
+          (
+            note,
+            noteIndex
+          ) =>
+            noteIndex ===
+            index
+              ? value
+              : note
+        )
+    )
+  }
+
+  /* ========================================
+     CLEAR DEFENSE SLOT
+  ======================================== */
+
+  const handleDefenseSlotClear = (
+    index: number
+  ) => {
+    setSelectedDefenseOperators(
+      (current) =>
+        current.map(
+          (
+            operator,
+            operatorIndex
+          ) =>
+            operatorIndex ===
+            index
+              ? null
+              : operator
+        )
+    )
+
+    setDefenseNotes(
+      (current) =>
+        current.map(
+          (
+            note,
+            noteIndex
+          ) =>
+            noteIndex ===
+            index
+              ? ''
+              : note
+        )
+    )
+  }
+
+  /* ========================================
+     MAP CHANGE
+  ======================================== */
 
   const handleMapChange = (
     newMapId: MapId
@@ -225,10 +433,30 @@ function App() {
 
     setTextValue('')
 
+    setSelectedDefenseOperators([
+      null,
+      null,
+      null,
+      null,
+      null,
+    ])
+
+    setDefenseNotes([
+      '',
+      '',
+      '',
+      '',
+      '',
+    ])
+
     setTool(
       'select'
     )
   }
+
+  /* ========================================
+     FLOOR CHANGE
+  ======================================== */
 
   const handleFloorChange = (
     newFloor: string
@@ -248,12 +476,17 @@ function App() {
     const operator =
       OPERATORS.find(
         (item) =>
-          item.id === operatorId
+          item.id ===
+          operatorId
       )
 
     if (!operator) {
       return
     }
+
+    /*
+      マップ中央に配置
+    */
 
     setOperatorItems(
       (current) => [
@@ -280,6 +513,20 @@ function App() {
         },
       ]
     )
+
+    /*
+      防衛側なら配置した瞬間
+      右サイドにも登録
+    */
+
+    if (
+      operator.side ===
+      'defense'
+    ) {
+      handleDefenseOperatorSelect(
+        operator.id
+      )
+    }
 
     setSelectedOperatorId(
       null
@@ -308,7 +555,8 @@ function App() {
     const gadget =
       GADGETS.find(
         (item) =>
-          item.id === gadgetId
+          item.id ===
+          gadgetId
       )
 
     if (!gadget) {
@@ -512,6 +760,10 @@ function App() {
     )
   }
 
+  /* ========================================
+     CLEAR BOARD
+  ======================================== */
+
   const clearBoard = () => {
     setPenObjects([])
     setMarkers([])
@@ -537,6 +789,22 @@ function App() {
 
     setTextValue('')
 
+    setSelectedDefenseOperators([
+      null,
+      null,
+      null,
+      null,
+      null,
+    ])
+
+    setDefenseNotes([
+      '',
+      '',
+      '',
+      '',
+      '',
+    ])
+
     setTool(
       'select'
     )
@@ -544,7 +812,13 @@ function App() {
 
   return (
     <div className="app">
+
+      {/* =================================
+          HEADER
+      ================================= */}
+
       <header className="header">
+
         <div>
           <h1>
             R6S TACTICS BOARD
@@ -563,9 +837,19 @@ function App() {
         >
           Clear Board
         </button>
+
       </header>
 
+      {/* =================================
+          MAIN
+      ================================= */}
+
       <div className="main">
+
+        {/* =================================
+            LEFT SIDEBAR
+        ================================= */}
+
         <Sidebar
           tool={
             tool
@@ -668,7 +952,12 @@ function App() {
           }
         />
 
+        {/* =================================
+            BOARD AREA
+        ================================= */}
+
         <main className="board-area">
+
           <div className="board-title">
             {selectedMap.name}
             {' / '}
@@ -792,7 +1081,15 @@ function App() {
             operatorGadgets={
               OPERATOR_GADGETS
             }
+
+            onDefenseOperatorSelect={
+              handleDefenseOperatorSelect
+            }
           />
+
+          {/* =================================
+              OPERATOR PANEL
+          ================================= */}
 
           <OperatorPanel
             operators={
@@ -823,8 +1120,33 @@ function App() {
               handleOperatorGadgetSelect
             }
           />
+
         </main>
+
+        {/* =================================
+            RIGHT SIDEBAR
+        ================================= */}
+
+        <RightSidebar
+          selectedDefenseOperators={
+            selectedDefenseOperators
+          }
+
+          defenseNotes={
+            defenseNotes
+          }
+
+          onDefenseNoteChange={
+            handleDefenseNoteChange
+          }
+
+          onDefenseSlotClear={
+            handleDefenseSlotClear
+          }
+        />
+
       </div>
+
     </div>
   )
 }

@@ -6,7 +6,7 @@ body {
   margin: 0;
 
   background: #0b0e12;
-  color: white;
+  color: #ffffff;
 
   font-family:
     Inter,
@@ -19,7 +19,8 @@ body {
 
 button,
 select,
-input {
+input,
+textarea {
   font: inherit;
 }
 
@@ -96,11 +97,13 @@ input {
 .main {
   display: flex;
 
+  align-items: flex-start;
+
   min-height: calc(100vh - 74px);
 }
 
 /* ========================================
-   SIDEBAR
+   LEFT SIDEBAR
 ======================================== */
 
 .sidebar {
@@ -150,6 +153,10 @@ input {
   border-radius: 5px;
 
   cursor: pointer;
+}
+
+.sidebar-select:hover {
+  border-color: #4a525e;
 }
 
 .sidebar-select:focus {
@@ -266,6 +273,7 @@ input {
 
 .pen-width-control {
   display: flex;
+
   align-items: center;
 
   gap: 10px;
@@ -417,6 +425,101 @@ input {
   cursor: not-allowed;
 }
 
+.text-option-block {
+  margin-top: 10px;
+}
+
+.text-option-label {
+  margin-bottom: 6px;
+
+  color: #7f8995;
+
+  font-size: 10px;
+  font-weight: bold;
+
+  letter-spacing: 1px;
+}
+
+/* ========================================
+   TEXT SIZE
+======================================== */
+
+.text-size-control {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.text-size-control input[type="range"] {
+  flex: 1;
+
+  min-width: 0;
+
+  cursor: pointer;
+}
+
+.text-size-value {
+  min-width: 48px;
+
+  padding: 5px 6px;
+
+  background: #161b21;
+  color: #ffffff;
+
+  border: 1px solid #303743;
+  border-radius: 4px;
+
+  text-align: center;
+
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* ========================================
+   TEXT COLORS
+======================================== */
+
+.text-color-grid {
+  display: grid;
+
+  grid-template-columns: repeat(6, 1fr);
+
+  gap: 5px;
+}
+
+.text-color-button {
+  width: 100%;
+
+  aspect-ratio: 1 / 1;
+
+  padding: 0;
+
+  border: 2px solid #303743;
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.12s ease,
+    border-color 0.12s ease,
+    box-shadow 0.12s ease;
+}
+
+.text-color-button:hover {
+  transform: scale(1.08);
+
+  border-color: #8d949e;
+}
+
+.text-color-button.active {
+  border-color: #ffffff;
+
+  box-shadow:
+    0 0 0 2px #d9a514;
+}
+
 /* ========================================
    MARKERS
 ======================================== */
@@ -433,6 +536,7 @@ input {
   width: 100%;
 
   display: flex;
+
   align-items: center;
 
   gap: 8px;
@@ -463,6 +567,7 @@ input {
   flex-shrink: 0;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -510,6 +615,7 @@ input {
   padding: 2px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -597,7 +703,7 @@ input {
 ======================================== */
 
 .board-area {
-  flex: 1;
+  flex: 0 0 auto;
 
   padding: 18px;
 
@@ -617,7 +723,7 @@ input {
 ======================================== */
 
 .canvas-wrapper {
-  width: 1352px;
+  width: 1552px;
   height: 902px;
 
   background: #151a20;
@@ -635,7 +741,7 @@ input {
 ======================================== */
 
 .operator-panel {
-  width: 1352px;
+  width: 1552px;
 
   margin-top: 12px;
 
@@ -834,6 +940,7 @@ input {
   padding: 2px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -876,99 +983,266 @@ input {
 }
 
 /* ========================================
-   TEXT OPTIONS
+   RIGHT SIDEBAR
 ======================================== */
 
-.text-option-block {
-  margin-top: 10px;
+.right-sidebar {
+  width: 320px;
+
+  flex: 0 0 320px;
+
+  min-height: calc(100vh - 74px);
+
+  padding: 18px 14px;
+
+  background: #10141a;
+
+  border-left: 1px solid #252b33;
 }
 
-.text-option-label {
-  margin-bottom: 6px;
+.right-sidebar-title {
+  margin-bottom: 14px;
 
   color: #7f8995;
 
-  font-size: 10px;
+  font-size: 11px;
   font-weight: bold;
+
+  letter-spacing: 2px;
+}
+
+/* ========================================
+   DEFENSE PLAN LIST
+======================================== */
+
+.defense-plan-list {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+/* ========================================
+   DEFENSE PLAN SLOT
+======================================== */
+
+.defense-plan-slot {
+  padding: 10px;
+
+  background: #161b21;
+
+  border: 1px solid #2c333d;
+  border-radius: 6px;
+}
+
+/* ========================================
+   DEFENSE PLAN HEADER
+======================================== */
+
+.defense-plan-slot-header {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin-bottom: 8px;
+}
+
+/* ========================================
+   DEFENSE NUMBER
+======================================== */
+
+.defense-plan-number {
+  width: 36px;
+  height: 36px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #ffffff;
+
+  border-radius: 4px;
+
+  font-size: 17px;
+  font-weight: bold;
+}
+
+/* 1 RED */
+
+.defense-plan-slot:nth-child(1)
+.defense-plan-number {
+  background: #ef4444;
+}
+
+/* 2 BLUE */
+
+.defense-plan-slot:nth-child(2)
+.defense-plan-number {
+  background: #3b82f6;
+}
+
+/* 3 GREEN */
+
+.defense-plan-slot:nth-child(3)
+.defense-plan-number {
+  background: #22c55e;
+}
+
+/* 4 YELLOW */
+
+.defense-plan-slot:nth-child(4)
+.defense-plan-number {
+  background: #eab308;
+
+  color: #111111;
+}
+
+/* 5 PURPLE */
+
+.defense-plan-slot:nth-child(5)
+.defense-plan-number {
+  background: #a855f7;
+}
+
+/* ========================================
+   DEFENSE OPERATOR
+======================================== */
+
+.defense-plan-operator {
+  min-width: 0;
+
+  flex: 1;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+.defense-plan-operator-image {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  object-fit: contain;
+
+  background: #292d33;
+
+  border: 1px solid #4a4f57;
+  border-radius: 4px;
+}
+
+.defense-plan-operator-name {
+  overflow: hidden;
+
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: bold;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+.defense-plan-empty {
+  color: #646e79;
+
+  font-size: 11px;
 
   letter-spacing: 1px;
 }
 
 /* ========================================
-   TEXT SIZE
+   DEFENSE DELETE BUTTON
 ======================================== */
 
-.text-size-control {
+.defense-plan-clear-button {
+  width: 32px;
+  height: 32px;
+
+  flex-shrink: 0;
+
+  margin-left: auto;
+
   display: flex;
+
   align-items: center;
-
-  gap: 10px;
-}
-
-.text-size-control input[type="range"] {
-  flex: 1;
-
-  min-width: 0;
-
-  cursor: pointer;
-}
-
-.text-size-value {
-  min-width: 48px;
-
-  padding: 5px 6px;
-
-  background: #161b21;
-  color: #ffffff;
-
-  border: 1px solid #303743;
-  border-radius: 4px;
-
-  text-align: center;
-
-  font-size: 12px;
-  font-weight: bold;
-}
-
-/* ========================================
-   TEXT COLORS
-======================================== */
-
-.text-color-grid {
-  display: grid;
-
-  grid-template-columns: repeat(6, 1fr);
-
-  gap: 5px;
-}
-
-.text-color-button {
-  width: 100%;
-
-  aspect-ratio: 1 / 1;
+  justify-content: center;
 
   padding: 0;
 
-  border: 2px solid #303743;
-  border-radius: 50%;
+  background: #30191b;
+  color: #ff7373;
+
+  border: 1px solid #7a3030;
+  border-radius: 4px;
+
+  font-size: 21px;
+  font-weight: bold;
+
+  line-height: 1;
 
   cursor: pointer;
 
   transition:
-    transform 0.12s ease,
+    background 0.12s ease,
     border-color 0.12s ease,
-    box-shadow 0.12s ease;
+    opacity 0.12s ease;
 }
 
-.text-color-button:hover {
-  transform: scale(1.08);
+.defense-plan-clear-button:hover:not(:disabled) {
+  background: #4a2023;
 
-  border-color: #8d949e;
+  border-color: #b33a3a;
 }
 
-.text-color-button.active {
-  border-color: #ffffff;
+.defense-plan-clear-button:disabled {
+  opacity: 0.2;
 
-  box-shadow:
-    0 0 0 2px #d9a514;
+  cursor: default;
+}
+
+/* ========================================
+   DEFENSE NOTE
+======================================== */
+
+.defense-plan-note {
+  width: 100%;
+  height: 46px;
+
+  padding: 0 10px;
+
+  background: #0f1318;
+  color: #ffffff;
+
+  border: 1px solid #303743;
+  border-radius: 5px;
+
+  outline: none;
+
+  font-family: inherit;
+  font-size: 25px;
+
+  line-height: 46px;
+}
+
+.defense-plan-note::placeholder {
+  color: #59626d;
+}
+
+.defense-plan-note:hover {
+  border-color: #454e59;
+}
+
+.defense-plan-note:focus {
+  border-color: #d9a514;
 }

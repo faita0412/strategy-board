@@ -29,7 +29,7 @@ import type {
   OperatorGadgetItem,
 } from '../types/board'
 
-const BOARD_WIDTH = 1350
+const BOARD_WIDTH = 1550
 const BOARD_HEIGHT = 900
 
 type BoardCanvasProps = {
@@ -103,6 +103,10 @@ type BoardCanvasProps = {
   selectedOperatorGadgetId: string | null
 
   operatorGadgets: OperatorGadgetDefinition[]
+
+  onDefenseOperatorSelect: (
+    operatorId: string
+  ) => void
 }
 
 /* ========================================
@@ -122,6 +126,10 @@ type OperatorIconProps = {
   onDelete: (
     id: string
   ) => void
+
+  onSelect: (
+    operatorId: string
+  ) => void
 }
 
 function OperatorIcon({
@@ -129,6 +137,7 @@ function OperatorIcon({
   tool,
   onMove,
   onDelete,
+  onSelect,
 }: OperatorIconProps) {
   const [image] =
     useImage(
@@ -155,6 +164,22 @@ function OperatorIcon({
           item.id,
           e.target.x(),
           e.target.y()
+        )
+      }}
+
+      onClick={(e) => {
+        if (
+          tool !==
+          'select'
+        ) {
+          return
+        }
+
+        e.cancelBubble =
+          true
+
+        onSelect(
+          item.operatorId
         )
       }}
 
@@ -424,11 +449,15 @@ function BoardCanvas({
   operatorItems,
   setOperatorItems,
 
+  operators,
+
   gadgetItems,
   setGadgetItems,
 
   operatorGadgetItems,
   setOperatorGadgetItems,
+
+  onDefenseOperatorSelect,
 }: BoardCanvasProps) {
   const isDrawing =
     useRef(
@@ -447,6 +476,33 @@ function BoardCanvas({
   ) => {
     return (
       stage.getPointerPosition()
+    )
+  }
+
+  /* ========================================
+     DEFENSE OPERATOR SELECT
+  ======================================== */
+
+  const handleOperatorClick = (
+    operatorId: string
+  ) => {
+    const operator =
+      operators.find(
+        (item) =>
+          item.id ===
+          operatorId
+      )
+
+    if (
+      !operator ||
+      operator.side !==
+        'defense'
+    ) {
+      return
+    }
+
+    onDefenseOperatorSelect(
+      operator.id
     )
   }
 
@@ -1590,6 +1646,10 @@ function BoardCanvas({
 
                 onDelete={
                   deleteOperator
+                }
+
+                onSelect={
+                  handleOperatorClick
                 }
               />
             )

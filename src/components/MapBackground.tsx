@@ -9,8 +9,8 @@ type MapBackgroundProps = {
   imagePath: string
 }
 
-const BOARD_WIDTH = 1350
-const BOARD_HEIGHT = 900
+const BOARD_WIDTH = 1552
+const BOARD_HEIGHT = 902
 
 function MapBackground({
   imagePath,
