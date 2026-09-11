@@ -2,12 +2,31 @@ import type {
   OperatorDefinition,
 } from '../types/board'
 
+type SelectedDefenseOperatorForDelete = {
+  slotIndex: number
+  operatorId: string
+} | null
+
 type RightSidebarProps = {
-  selectedDefenseOperators: (
-    OperatorDefinition | null
-  )[]
+  selectedDefenseOperators:
+    OperatorDefinition[][]
 
   defenseNotes: string[]
+
+  activeDefenseSlot:
+    number | null
+
+  selectedDefenseOperatorForDelete:
+    SelectedDefenseOperatorForDelete
+
+  onDefenseSlotSelect: (
+    index: number
+  ) => void
+
+  onDefenseOperatorDeleteSelect: (
+    slotIndex: number,
+    operatorId: string
+  ) => void
 
   onDefenseNoteChange: (
     index: number,
@@ -22,6 +41,10 @@ type RightSidebarProps = {
 function RightSidebar({
   selectedDefenseOperators,
   defenseNotes,
+  activeDefenseSlot,
+  selectedDefenseOperatorForDelete,
+  onDefenseSlotSelect,
+  onDefenseOperatorDeleteSelect,
   onDefenseNoteChange,
   onDefenseSlotClear,
 }: RightSidebarProps) {
@@ -37,48 +60,122 @@ function RightSidebar({
         {Array.from({
           length: 5,
         }).map((_, index) => {
-          const operator =
+          const operators =
             selectedDefenseOperators[
               index
-            ] ?? null
+            ] ?? []
 
           const note =
             defenseNotes[
               index
             ] ?? ''
 
+          const isActive =
+            activeDefenseSlot ===
+            index
+
+          const hasSelectedOperator =
+            selectedDefenseOperatorForDelete
+              ?.slotIndex ===
+            index
+
           return (
             <div
               key={index}
-              className="defense-plan-slot"
+              className={
+                isActive
+                  ? 'defense-plan-slot active'
+                  : 'defense-plan-slot'
+              }
             >
 
-              {/* SLOT HEADER */}
+              {/* =================================
+                  SLOT HEADER
+              ================================= */}
 
               <div className="defense-plan-slot-header">
 
-                <div className="defense-plan-number">
+                {/* =================================
+                    NUMBER / ADD DESTINATION
+                ================================= */}
+
+                <button
+                  type="button"
+                  className="defense-plan-number"
+                  onClick={() =>
+                    onDefenseSlotSelect(
+                      index
+                    )
+                  }
+                  title={
+                    isActive
+                      ? 'Cancel operator destination'
+                      : `Add next operator to ${index + 1}`
+                  }
+                >
                   {index + 1}
-                </div>
+                </button>
+
+                {/* =================================
+                    OPERATOR AREA
+                ================================= */}
 
                 <div className="defense-plan-operator">
 
-                  {operator ? (
-                    <>
-                      <img
-                        className="defense-plan-operator-image"
-                        src={
-                          operator.image
-                        }
-                        alt={
-                          operator.name
-                        }
-                      />
+                  {operators.length >
+                  0 ? (
+                    <div className="defense-plan-operator-icons">
 
-                      <span className="defense-plan-operator-name">
-                        {operator.name}
-                      </span>
-                    </>
+                      {operators.map(
+                        (
+                          operator
+                        ) => {
+                          const isSelectedForDelete =
+                            selectedDefenseOperatorForDelete
+                              ?.slotIndex ===
+                              index &&
+                            selectedDefenseOperatorForDelete
+                              .operatorId ===
+                              operator.id
+
+                          return (
+                            <button
+                              key={
+                                operator.id
+                              }
+                              type="button"
+                              className={
+                                isSelectedForDelete
+                                  ? 'defense-plan-operator-button selected-for-delete'
+                                  : 'defense-plan-operator-button'
+                              }
+                              onClick={() =>
+                                onDefenseOperatorDeleteSelect(
+                                  index,
+                                  operator.id
+                                )
+                              }
+                              title={
+                                isSelectedForDelete
+                                  ? `${operator.name} - selected for delete`
+                                  : `${operator.name} - click to select`
+                              }
+                            >
+                              <img
+                                className="defense-plan-operator-image"
+                                src={
+                                  operator.image
+                                }
+                                alt={
+                                  operator.name
+                                }
+                              />
+                            </button>
+                          )
+                        }
+                      )}
+
+                    </div>
                   ) : (
                     <span className="defense-plan-empty">
                       NOT SELECTED
@@ -86,6 +183,10 @@ function RightSidebar({
                   )}
 
                 </div>
+
+                {/* =================================
+                    DELETE SELECTED OPERATOR
+                ================================= */}
 
                 <button
                   type="button"
@@ -96,17 +197,22 @@ function RightSidebar({
                     )
                   }
                   disabled={
-                    !operator &&
-                    !note
+                    !hasSelectedOperator
                   }
-                  title="Clear slot"
+                  title={
+                    hasSelectedOperator
+                      ? 'Delete selected operator'
+                      : 'Select an operator first'
+                  }
                 >
                   ×
                 </button>
 
               </div>
 
-              {/* ONE LINE MEMO */}
+              {/* =================================
+                  ONE LINE MEMO
+              ================================= */}
 
               <input
                 type="text"

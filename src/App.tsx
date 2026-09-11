@@ -217,20 +217,25 @@ function App() {
 
   /* ========================================
      RIGHT SIDEBAR
+     MULTIPLE DEFENSE OPERATORS
   ======================================== */
 
   const [
     selectedDefenseOperators,
     setSelectedDefenseOperators,
   ] = useState<
-    (OperatorDefinition | null)[]
+    OperatorDefinition[][]
   >([
-    null,
-    null,
-    null,
-    null,
-    null,
+    [],
+    [],
+    [],
+    [],
+    [],
   ])
+
+  /* ========================================
+     DEFENSE NOTES
+  ======================================== */
 
   const [
     defenseNotes,
@@ -242,6 +247,42 @@ function App() {
     '',
     '',
   ])
+
+  /* ========================================
+     ACTIVE DEFENSE SLOT
+
+     null = 自動登録
+
+     0 = 1番
+     1 = 2番
+     2 = 3番
+     3 = 4番
+     4 = 5番
+  ======================================== */
+
+  const [
+    activeDefenseSlot,
+    setActiveDefenseSlot,
+  ] = useState<number | null>(
+    null
+  )
+
+  /* ========================================
+     SELECTED OPERATOR FOR DELETE
+
+     右サイドで削除対象として
+     選択したオペレーター
+  ======================================== */
+
+  const [
+    selectedDefenseOperatorForDelete,
+    setSelectedDefenseOperatorForDelete,
+  ] = useState<{
+    slotIndex: number
+    operatorId: string
+  } | null>(
+    null
+  )
 
   /* ========================================
      CURRENT MAP
@@ -256,6 +297,21 @@ function App() {
     selectedMap.floors[
       floor
     ]
+
+  /* ========================================
+     DEFENSE SLOT SELECT
+  ======================================== */
+
+  const handleDefenseSlotSelect = (
+    index: number
+  ) => {
+    setActiveDefenseSlot(
+      (current) =>
+        current === index
+          ? null
+          : index
+    )
+  }
 
   /* ========================================
      DEFENSE OPERATOR REGISTER
@@ -282,32 +338,63 @@ function App() {
     setSelectedDefenseOperators(
       (current) => {
         /*
-          同じオペレーターが
-          登録済みなら追加しない
+          右サイド全体ですでに
+          登録済みなら重複登録しない
         */
 
         const alreadyExists =
           current.some(
-            (item) =>
-              item?.id ===
-              operator.id
+            (slotOperators) =>
+              slotOperators.some(
+                (item) =>
+                  item.id ===
+                  operator.id
+              )
           )
 
-        if (
-          alreadyExists
-        ) {
+        if (alreadyExists) {
           return current
         }
 
         /*
-          1～5の最初の空き枠
+          登録先番号が指定されている場合
+        */
+
+        if (
+          activeDefenseSlot !==
+          null
+        ) {
+          return current.map(
+            (
+              slotOperators,
+              index
+            ) =>
+              index ===
+              activeDefenseSlot
+                ? [
+                    ...slotOperators,
+                    operator,
+                  ]
+                : slotOperators
+          )
+        }
+
+        /*
+          指定されていない場合は
+          最初の空き番号へ登録
         */
 
         const emptyIndex =
           current.findIndex(
-            (item) =>
-              item === null
+            (slotOperators) =>
+              slotOperators.length ===
+              0
           )
+
+        /*
+          1〜5が全部埋まっている場合は
+          番号を指定するまで登録しない
+        */
 
         if (
           emptyIndex === -1
@@ -315,15 +402,19 @@ function App() {
           return current
         }
 
-        const next = [
-          ...current,
-        ]
-
-        next[
-          emptyIndex
-        ] = operator
-
-        return next
+        return current.map(
+          (
+            slotOperators,
+            index
+          ) =>
+            index ===
+            emptyIndex
+              ? [
+                  ...slotOperators,
+                  operator,
+                ]
+              : slotOperators
+        )
       }
     )
   }
@@ -352,38 +443,88 @@ function App() {
   }
 
   /* ========================================
-     CLEAR DEFENSE SLOT
+     SELECT OPERATOR FOR DELETE
+  ======================================== */
+
+  const handleDefenseOperatorDeleteSelect = (
+    slotIndex: number,
+    operatorId: string
+  ) => {
+    setSelectedDefenseOperatorForDelete(
+      (current) => {
+        /*
+          同じオペレーターを
+          もう一度クリックしたら選択解除
+        */
+
+        if (
+          current?.slotIndex ===
+            slotIndex &&
+          current.operatorId ===
+            operatorId
+        ) {
+          return null
+        }
+
+        return {
+          slotIndex,
+          operatorId,
+        }
+      }
+    )
+  }
+
+  /* ========================================
+     DELETE SELECTED DEFENSE OPERATOR
   ======================================== */
 
   const handleDefenseSlotClear = (
     index: number
   ) => {
+    /*
+      その番号内で削除対象が
+      選択されていなければ何もしない
+    */
+
+    if (
+      !selectedDefenseOperatorForDelete ||
+      selectedDefenseOperatorForDelete
+        .slotIndex !== index
+    ) {
+      return
+    }
+
+    const operatorId =
+      selectedDefenseOperatorForDelete
+        .operatorId
+
+    /*
+      選択された1人だけ削除
+    */
+
     setSelectedDefenseOperators(
       (current) =>
         current.map(
           (
-            operator,
-            operatorIndex
+            slotOperators,
+            slotIndex
           ) =>
-            operatorIndex ===
-            index
-              ? null
-              : operator
+            slotIndex === index
+              ? slotOperators.filter(
+                  (operator) =>
+                    operator.id !==
+                    operatorId
+                )
+              : slotOperators
         )
     )
 
-    setDefenseNotes(
-      (current) =>
-        current.map(
-          (
-            note,
-            noteIndex
-          ) =>
-            noteIndex ===
-            index
-              ? ''
-              : note
-        )
+    /*
+      削除後は選択解除
+    */
+
+    setSelectedDefenseOperatorForDelete(
+      null
     )
   }
 
@@ -434,11 +575,11 @@ function App() {
     setTextValue('')
 
     setSelectedDefenseOperators([
-      null,
-      null,
-      null,
-      null,
-      null,
+      [],
+      [],
+      [],
+      [],
+      [],
     ])
 
     setDefenseNotes([
@@ -448,6 +589,14 @@ function App() {
       '',
       '',
     ])
+
+    setActiveDefenseSlot(
+      null
+    )
+
+    setSelectedDefenseOperatorForDelete(
+      null
+    )
 
     setTool(
       'select'
@@ -485,7 +634,7 @@ function App() {
     }
 
     /*
-      マップ中央に配置
+      マップ中央へ配置
     */
 
     setOperatorItems(
@@ -515,8 +664,8 @@ function App() {
     )
 
     /*
-      防衛側なら配置した瞬間
-      右サイドにも登録
+      防衛側なら配置した瞬間に
+      右サイドへ登録
     */
 
     if (
@@ -555,8 +704,7 @@ function App() {
     const gadget =
       GADGETS.find(
         (item) =>
-          item.id ===
-          gadgetId
+          item.id === gadgetId
       )
 
     if (!gadget) {
@@ -790,11 +938,11 @@ function App() {
     setTextValue('')
 
     setSelectedDefenseOperators([
-      null,
-      null,
-      null,
-      null,
-      null,
+      [],
+      [],
+      [],
+      [],
+      [],
     ])
 
     setDefenseNotes([
@@ -804,6 +952,14 @@ function App() {
       '',
       '',
     ])
+
+    setActiveDefenseSlot(
+      null
+    )
+
+    setSelectedDefenseOperatorForDelete(
+      null
+    )
 
     setTool(
       'select'
@@ -1134,6 +1290,22 @@ function App() {
 
           defenseNotes={
             defenseNotes
+          }
+
+          activeDefenseSlot={
+            activeDefenseSlot
+          }
+
+          selectedDefenseOperatorForDelete={
+            selectedDefenseOperatorForDelete
+          }
+
+          onDefenseSlotSelect={
+            handleDefenseSlotSelect
+          }
+
+          onDefenseOperatorDeleteSelect={
+            handleDefenseOperatorDeleteSelect
           }
 
           onDefenseNoteChange={
