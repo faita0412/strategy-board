@@ -1352,3 +1352,47 @@ textarea {
 .defense-plan-note:focus {
   border-color: #d9a514;
 }
+
+/* ========================================
+   EXPORT PNG BUTTON
+======================================== */
+
+.export-button {
+  padding: 9px 16px;
+
+  background: #173022;
+  color: #7ee2a8;
+
+  border: 1px solid #2e8b57;
+  border-radius: 5px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease,
+    transform 0.12s ease;
+}
+
+.export-button:hover {
+  background: #214b31;
+
+  border-color: #52b97b;
+
+  transform: translateY(-1px);
+}
+
+/* ========================================
+   HEADER ACTIONS
+======================================== */
+
+.header-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.export-area {
+  display: flex;
+  align-items: flex-start;
+}
