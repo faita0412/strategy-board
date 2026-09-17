@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
 import {
   Stage,
@@ -106,6 +106,10 @@ type BoardCanvasProps = {
 
   onDefenseOperatorSelect: (
     operatorId: string
+  ) => void
+
+  onStageReady?: (
+    stage: Konva.Stage | null
   ) => void
 }
 
@@ -458,7 +462,25 @@ function BoardCanvas({
   setOperatorGadgetItems,
 
   onDefenseOperatorSelect,
+  onStageReady,
 }: BoardCanvasProps) {
+  const stageRef =
+    useRef<Konva.Stage | null>(
+      null
+    )
+
+  useEffect(() => {
+    onStageReady?.(
+      stageRef.current
+    )
+
+    return () => {
+      onStageReady?.(
+        null
+      )
+    }
+  }, [onStageReady])
+
   const isDrawing =
     useRef(
       false
@@ -1224,6 +1246,10 @@ function BoardCanvas({
     <div className="canvas-wrapper">
 
       <Stage
+        ref={
+          stageRef
+        }
+
         width={
           BOARD_WIDTH
         }

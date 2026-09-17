@@ -3,14 +3,12 @@ import {
   useState,
 } from 'react'
 
-import {
-  toPng,
-} from 'html-to-image'
-
 import BoardCanvas from './components/BoardCanvas'
 import Sidebar from './components/Sidebar'
 import OperatorPanel from './components/OperatorPanel'
 import RightSidebar from './components/RightSidebar'
+
+import type Konva from 'konva'
 
 import {
   MAPS,
@@ -82,11 +80,11 @@ export function numberToAlphabet(
 
 function App() {
   /* ========================================
-     EXPORT AREA
+     BOARD STAGE
   ======================================== */
 
-  const exportAreaRef =
-    useRef<HTMLDivElement | null>(
+  const boardStageRef =
+    useRef<Konva.Stage | null>(
       null
     )
 
@@ -361,182 +359,29 @@ function App() {
     ]
 
   /* ========================================
-     WAIT FOR EXPORT IMAGES
-  ======================================== */
+     EXPORT MAP PNG
 
-  const waitForExportImages =
-    async (
-      element: HTMLElement
-    ) => {
-      const images =
-        Array.from(
-          element.querySelectorAll(
-            'img'
-          )
-        )
-
-      if (
-        images.length === 0
-      ) {
-        return
-      }
-
-      const failedImages:
-        string[] = []
-
-      await Promise.all(
-        images.map(
-          (
-            image
-          ) =>
-            new Promise<void>(
-              (
-                resolve
-              ) => {
-                if (
-                  image.complete
-                ) {
-                  if (
-                    image.naturalWidth ===
-                    0
-                  ) {
-                    failedImages.push(
-                      image.src
-                    )
-                  }
-
-                  resolve()
-                  return
-                }
-
-                const handleLoad =
-                  () => {
-                    cleanup()
-                    resolve()
-                  }
-
-                const handleError =
-                  () => {
-                    failedImages.push(
-                      image.src
-                    )
-
-                    cleanup()
-                    resolve()
-                  }
-
-                const cleanup =
-                  () => {
-                    image.removeEventListener(
-                      'load',
-                      handleLoad
-                    )
-
-                    image.removeEventListener(
-                      'error',
-                      handleError
-                    )
-                  }
-
-                image.addEventListener(
-                  'load',
-                  handleLoad
-                )
-
-                image.addEventListener(
-                  'error',
-                  handleError
-                )
-              }
-            )
-        )
-      )
-
-      if (
-        failedImages.length >
-        0
-      ) {
-        console.error(
-          'PNG export: failed images',
-          failedImages
-        )
-
-        throw new Error(
-          `Failed to load ${failedImages.length} image(s)`
-        )
-      }
-    }
-
-  /* ========================================
-     EXPORT PNG
+     表示中のKonva Stageをそのまま
+     PNGとして保存する
   ======================================== */
 
   const handleExportPng =
-    async () => {
-      const exportElement =
-        exportAreaRef.current
+    () => {
+      const stage =
+        boardStageRef.current
 
-      if (
-        !exportElement
-      ) {
+      if (!stage) {
+        alert(
+          'マップの読み込みが完了していません。'
+        )
         return
       }
 
       try {
-        /*
-          右サイドの画像が
-          読み込み済みか確認
-        */
-
-        await waitForExportImages(
-          exportElement
-        )
-
-        /*
-          選択中表示をPNGへ
-          残さないように解除
-        */
-
-        setSelectedDefenseOperatorForDelete(
-          null
-        )
-
-        setActiveDefenseSlot(
-          null
-        )
-
-        /*
-          Reactの画面更新を待つ
-        */
-
-        await new Promise<void>(
-          (
-            resolve
-          ) => {
-            requestAnimationFrame(
-              () => {
-                requestAnimationFrame(
-                  () => {
-                    resolve()
-                  }
-                )
-              }
-            )
-          }
-        )
-
         const dataUrl =
-          await toPng(
-            exportElement,
-            {
-              pixelRatio: 2,
-
-              backgroundColor:
-                '#0b0e12',
-
-              cacheBust: false,
-            }
-          )
+          stage.toDataURL({
+            pixelRatio: 2,
+          })
 
         const link =
           document.createElement(
@@ -555,7 +400,7 @@ function App() {
             )
 
         link.download =
-          `r6s-tactics-${mapId}-${safeFloor}.png`
+          `r6s-board-${mapId}-${safeFloor}.png`
 
         link.href =
           dataUrl
@@ -567,16 +412,14 @@ function App() {
         link.click()
 
         link.remove()
-      } catch (
-        error
-      ) {
+      } catch (error) {
         console.error(
-          'PNG export failed:',
+          'Board PNG export failed:',
           error
         )
 
         alert(
-          'PNG保存に失敗しました。Consoleを確認してください。'
+          'マップ画像の保存に失敗しました。Consoleを確認してください。'
         )
       }
     }
@@ -1309,7 +1152,7 @@ function App() {
               handleExportPng
             }
           >
-            Export PNG
+            Export Map PNG
           </button>
 
           <button
@@ -1456,9 +1299,6 @@ function App() {
           ================================= */}
 
           <div
-            ref={
-              exportAreaRef
-            }
             className="export-area"
           >
 
@@ -1599,6 +1439,13 @@ function App() {
 
                 onDefenseOperatorSelect={
                   handleDefenseOperatorSelect
+                }
+
+                onStageReady={
+                  (stage) => {
+                    boardStageRef.current =
+                      stage
+                  }
                 }
               />
 
